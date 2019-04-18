@@ -1,0 +1,88 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
+	<script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.1/aframe/build/aframe-ar.js"></script>
+
+	<script src="https://rawgit.com/bryik/aframe-bmfont-text-component/master/dist/aframe-bmfont-text-component.min.js"></script>
+	<script src="https://unpkg.com/aframe-line-component/dist/aframe-line-component.min.js"></script>
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="resources/app.css">
+</head>
+
+<body style='margin : 0px; overflow: hidden;'>
+
+	<a-scene embedded stats arjs='sourceType: webcam; debugUIEnabled: true; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
+
+		<a-entity light="type: ambient; color: #BBB"></a-entity>
+		<a-entity light="type: directional; color: #FFF; intensity: 1.0" position="-0.5 1 1"></a-entity>
+
+		<a-assets>
+			<!-- GLTF models courtesey of Conor Forker: https://poly.google.com/user/5c3uyakiuXs -->
+			<a-asset-item id="hydrogen" src="resources/Hydrogen.gltf"></a-asset-item>
+			<a-asset-item id="oxygen" src="resources/Oxygen.gltf"></a-asset-item>
+		</a-assets>
+
+		<a-marker id="custom_marker-oxygen" type="pattern" url="resources/oxygen-marker-cl.patt" attributes="emitevents: true;" markerevents>
+			<a-entity gltf-model="#oxygen" scale="15.0 15.0 15.0"></a-entity>
+			<!-- for position debugging -->
+			<a-entity id="oxygen-label" text="value: Hello World;" position="0.6 0.0 0.37" scale="1.5 1.5 1.5" rotation="-90.0 0.0 0.0"></a-entity>
+		</a-marker>
+
+		<a-marker id="custom_marker-hydrogen" type="pattern" url="resources/hydrogen-marker-cl.patt" attributes="emitevents: true;" markerevents>
+			<a-entity gltf-model="#hydrogen" scale="15.0 15.0 15.0"></a-entity>
+			<!-- for position debugging -->
+			<a-entity id="hydrogen-label" text="value: Hello World;" position="0.6 0.0 0.37" scale="1.5 1.5 1.5" rotation="-90.0 0.0 0.0"></a-entity>
+		</a-marker>
+
+		<a-entity id="distance-line" line="color: #ff0000; opacity: 1; visible: true;"></a-entity>
+
+
+		<!-- BANGOR LOGO MARKER -->
+		<!-- <a-marker id="bangor" attributes="emitevents: true;" type="pattern" url="resources/pattern-marker.patt">
+
+			 BAR CHART GRAPH START
+			<a-entity scale="8.0 8.0 8.0" rotation="-90.0 0.0 0.0" position="-0.3 0.0 -0.3">
+				<a-entity light="type: ambient; color: #BBB"></a-entity>
+				<a-entity light="type: directional; color: #FFF; intensity: 0.6" position="-0.5 1 1"></a-entity>
+
+				Graph
+				<a-entity id="helloworld" rotation="90 0 0" position="0 0 0" scale="0.02 0.02 0.02"></a-entity>
+				Graph Box
+				<a-box id="arBase" position="0.04 -0.04 -0.003" rotation="0 0 0" width="0.12" height="0.12" depth="0.003" color="#fff"></a-box>
+				<a-entity id="guides">
+				Left Wall
+				<a-box id="leftwall" position="-0.02 -0.04 0.06" width="0.001" height="0.12" depth="0.14" material="side: double; color: #fff; transparent: true; opacity: 0.1" ></a-box>
+				<a-entity id="spineA" line="start: -0.02 -0.10 0.02; end: -0.02 0.02 0.02; color: #000; transparent: true; opacity: 0.2"></a-entity>
+				<a-entity id="spineB" line="start: -0.02 -0.10 0.04; end: -0.02 0.02 0.04; color: #000; transparent: true; opacity: 0.2"></a-entity>
+				<a-entity id="spineC" line="start: -0.02 -0.10 0.06; end: -0.02 0.02 0.06; color: #000; transparent: true; opacity: 0.2"></a-entity>
+				<a-entity id="spineD" line="start: -0.02 -0.10 0.08; end: -0.02 0.02 0.08; color: #000; transparent: true; opacity: 0.2"></a-entity>
+				<a-entity id="spineE" line="start: -0.02 -0.10 0.1; end: -0.02 0.02 0.1; color: #000; transparent: true; opacity: 0.2"></a-entity>
+				<a-entity id="spineF" line="start: -0.02 -0.10 0.12; end: -0.02 0.02 0.12; color: #000; transparent: true; opacity: 0.2"></a-entity>
+				Back Wall
+				<a-box id="backwall" position="0.04 0.02 0.06" width="0.12" height="0.001" depth="0.14" material="side: double; color: #fff; transparent: true; opacity: 0.1" ></a-box>
+				<a-entity id="spineG" line="start: -0.02 0.02 0.02; end: 0.10 0.02 0.02; color: #000; transparent: true; opacity: 0.2"></a-entity>
+				<a-entity id="spineH" line="start: -0.02 0.02 0.04; end: 0.10 0.02 0.04; color: #000; transparent: true; opacity: 0.2"></a-entity>
+				<a-entity id="spineJ" line="start: -0.02 0.02 0.06; end: 0.10 0.02 0.06; color: #000; transparent: true; opacity: 0.2"></a-entity>
+				<a-entity id="spineK" line="start: -0.02 0.02 0.08; end: 0.10 0.02 0.08; color: #000; transparent: true; opacity: 0.2"></a-entity>
+				<a-entity id="spineL" line="start: -0.02 0.02 0.10; end: 0.10 0.02 0.10; color: #000; transparent: true; opacity: 0.2"></a-entity>
+				<a-entity id="spineM" line="start: -0.02 0.02 0.12; end: 0.10 0.02 0.12; color: #000; transparent: true; opacity: 0.2"></a-entity>
+				</a-entity>
+				Base
+				<a-box id="arBase" position="0.04 -0.04 -0.01" rotation="0 0 0" width="0.15" height="0.15" depth="0.01" color="#D3CECF"></a-box>
+				Text Label
+				<a-entity text="value: Hello World;" position="0.42 -0.15 0.0"></a-entity>
+			</a-entity>
+
+		</a-marker> -->
+
+		<a-entity camera></a-entity>
+
+	</a-scene>
+
+	<!-- <script src="scripts/barChart.js"></script> -->
+	<script src="scripts/AppScript-1.0.js"></script>
+
+</body>
+
+</html>

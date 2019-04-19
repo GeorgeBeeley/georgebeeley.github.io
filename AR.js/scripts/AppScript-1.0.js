@@ -1,10 +1,11 @@
 // const hiroMarker = d3.select("#marker-hiro");
 // const bangorMarker = d3.select("#custom_marker-bangor");
-const oxygenMarker = document.querySelector("#custom_marker-oxygen");
-const hydrogenMarker = document.querySelector("#custom_marker-hydrogen");
 
-function getMarkerPos() {
-  if (oxygenPresent && hydrogenPresent) {
+// const oxygenMarker = document.querySelector("#custom_marker-oxygen");
+// const hydrogenMarker = document.querySelector("#custom_marker-hydrogen");
+
+function getDistance() {
+  if (oxygenMarker.object3D.visible && hydrogenMarker.object3D.visible) {
     let oxygenPos = oxygenMarker.object3D.position;
     let hydrogenPos = hydrogenMarker.object3D.position;
     let dx = oxygenPos.x - hydrogenPos.x;
@@ -12,15 +13,63 @@ function getMarkerPos() {
     let dz = oxygenPos.z - hydrogenPos.z;
     var distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
     console.log('distance', distance);
+    return distance;
   }
 }
 
-// AFRAME.registreComponent('distanceline', {
+// AFRAME.registerComponent('distanceline', {
+//   schema: {
+//     event: {type: 'string', default: ''},
+//     message: {type: 'string', default: 'test distanceLine message'}
+//   },
 //   init: function () {
 //
-//     this.update =
-//   }
-// })
+//     // closure to access fresh 'this.data' from event handler context
+//     var self = this;
+//
+//     // .init() is a good place to set up initial state and variables.
+//     // Store a reference to the handler so we can later remove it.
+//     this.evenHandlerFn = function() { console.log(self.data.message); };
+//
+//   },
+//   update: function(oldData) {
+//
+//     var data = this.data;
+//     var el = this.el;
+//
+//     if (oldData.event && data.event !== oldData.event) {
+//       el.removeEventListener(oldData.event, this.eventHandlerFn);
+//     }
+//
+//     if (data.event) {
+//
+//       el.addEventListener(data.event, function() {
+//         console.log('Event specified, line Pos should be updated when event is triggered.');
+//
+//         if (oxygenMarker.object3D.visible && hydrogenMarker.object3D.visible) {
+//           el.setAttribute(line, {
+//             start: oxygenMarker.object3D.position,
+//             end: hydrogenMarker.object3D.position
+//           });
+//         } else {
+//           console.log('Error, both markers not visible');
+//         }
+//
+//       });
+//     } else {
+//       console.log('Event not specified');
+//     }
+//
+//
+//     // var distance = getDistance();
+//     //
+//     // document.querySelector('#distance-line').setAttribute('line', {
+//     //   this.data.start = oxygenPos,
+//     //   this.data.end = hydrogenPos
+//     // });
+//
+//     }
+// });
 
 AFRAME.registerComponent('markerevents', {
   init: function () {
@@ -46,8 +95,8 @@ AFRAME.registerComponent('markerevents', {
   },
   tick: function(t, dt) {
 
-    var oxygenPos = oxygenMarker.object3D.position;
-    var hydrogenPos = hydrogenMarker.object3D.position;
+    var oxygenPos = document.querySelector("#custom_marker-oxygen").object3D.position;
+    var hydrogenPos = document.querySelector("#custom_marker-hydrogen").object3D.position;
 
     if (oxygenMarker.object3D.visible) {
       let oxygenText = "x = " + oxygenPos.x.toFixed(3).toString()
@@ -64,16 +113,24 @@ AFRAME.registerComponent('markerevents', {
     }
 
     if (oxygenMarker.object3D.visible && hydrogenMarker.object3D.visible) {
-      let dx = oxygenPos.x - hydrogenPos.x;
-      let dy = oxygenPos.y - hydrogenPos.y;
-      let dz = oxygenPos.z - hydrogenPos.z;
-      var distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      // document.querySelector('#distance-line').emit('bothVisible');
+
+      var distance = getDistance();
 
       // currently the line coordinates are only updated once and are not refreshed
-      document.querySelector('#distance-line').setAttribute('line', {
-        start: oxygenPos,
-        end: hydrogenPos
-      });
+      if (distance < 2) {
+        document.querySelector('#distance-line').setAttribute('line', {
+          color: '#00FF00',
+          start: oxygenPos,
+          end: hydrogenPos
+        });
+      } else {
+        document.querySelector('#distance-line').setAttribute('line', {
+          color: '#FF0000',
+          start: oxygenPos,
+          end: hydrogenPos
+        });
+      }
       console.log('distance', distance);
     }
 

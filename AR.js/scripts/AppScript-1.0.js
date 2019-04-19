@@ -12,6 +12,13 @@ function getMarkerPos() {
   }
 }
 
+// AFRAME.registreComponent('distanceline', {
+//   init: function () {
+//
+//     this.update =
+//   }
+// })
+
 AFRAME.registerComponent('markerevents', {
   init: function () {
 

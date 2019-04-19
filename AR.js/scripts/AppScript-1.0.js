@@ -5,9 +5,12 @@ const hydrogenMarker = document.querySelector("#custom_marker-hydrogen");
 
 function getMarkerPos() {
   if (oxygenPresent && hydrogenPresent) {
-    var oxygenPos = oxygenMarker.object3D.position;
-    var hydrogenPos = hydrogenMarker.object3D.position;
-    var distance = Math.sqrt((oxygenPos.x - hydrogenPos.x)^2 + (oxygenPos.y - hydrogenPos.y)^2 + (oxygenPos.z - hydrogenPos.z)^2);
+    let oxygenPos = oxygenMarker.object3D.position;
+    let hydrogenPos = hydrogenMarker.object3D.position;
+    let dx = oxygenPos.x - hydrogenPos.x;
+    let dy = oxygenPos.y - hydrogenPos.y;
+    let dz = oxygenPos.z - hydrogenPos.z;
+    var distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
     console.log('distance', distance);
   }
 }
@@ -61,9 +64,10 @@ AFRAME.registerComponent('markerevents', {
     }
 
     if (oxygenMarker.object3D.visible && hydrogenMarker.object3D.visible) {
-      let magOxPos = oxygenPos * 100;
-      let magHyPos = hydrogenPos * 100;
-      let distance = Math.sqrt((magOxPos.x - magHyPos.x)^2 + (magOxPos.y - magHyPos.y)^2 + (magOxPos.z - magHyPos.z)^2);
+      let dx = oxygenPos.x - hydrogenPos.x;
+      let dy = oxygenPos.y - hydrogenPos.y;
+      let dz = oxygenPos.z - hydrogenPos.z;
+      var distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
       // currently the line coordinates are only updated once and are not refreshed
       document.querySelector('#distance-line').setAttribute('line', {

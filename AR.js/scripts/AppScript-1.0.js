@@ -15,7 +15,7 @@ function getMarkerPos() {
 AFRAME.registerComponent('markerevents', {
   init: function () {
 
-    this.tick = AFRAME.utils.throttleTick(this.tick, 50, this);
+    this.tick = AFRAME.utils.throttleTick(this.tick, 500, this);
     var marker = this.el;
 
     function debugLog(m) {
@@ -53,11 +53,9 @@ AFRAME.registerComponent('markerevents', {
       document.querySelector('#hydrogen-label').setAttribute('text', { value: hydrogenText });
     }
 
-    var magOxPos;
-    var magHyPos;
     if (oxygenMarker.object3D.visible && hydrogenMarker.object3D.visible) {
-      magOxPos = oxygenPos * 100;
-      magHyPos = hydrogenPos * 100;
+      let magOxPos = oxygenPos * 100;
+      let magHyPos = hydrogenPos * 100;
       let distance = Math.sqrt((magOxPos.x - magHyPos.x)^2 + (magOxPos.y - magHyPos.y)^2 + (magOxPos.z - magHyPos.z)^2);
 
       // currently the line coordinates are only updated once and are not refreshed

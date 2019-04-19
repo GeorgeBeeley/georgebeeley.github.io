@@ -1,8 +1,8 @@
 // const hiroMarker = d3.select("#marker-hiro");
 // const bangorMarker = d3.select("#custom_marker-bangor");
 
-// const oxygenMarker = document.querySelector("#custom_marker-oxygen");
-// const hydrogenMarker = document.querySelector("#custom_marker-hydrogen");
+const oxygenMarker = document.querySelector("#custom_marker-oxygen");
+const hydrogenMarker = document.querySelector("#custom_marker-hydrogen");
 
 function getDistance() {
   if (oxygenMarker.object3D.visible && hydrogenMarker.object3D.visible) {

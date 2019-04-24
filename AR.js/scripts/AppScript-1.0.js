@@ -6,7 +6,8 @@ const hydrogenMarker = document.querySelector("#custom_marker-hydrogen");
 const hydrogenObj = document.querySelector('#hydrogen-obj');
 const oxygenObj = document.querySelector('#oxygen-obj');
 const origin = {x: 0, y: 0, z: 0};
-var interpolateMag = 0.025;
+var interpolateMag = 0.05;
+var debug = true;
 
 function getDistance(p1, p2) {
   let dx = p1.x - p2.x;
@@ -20,23 +21,19 @@ function getDistance(p1, p2) {
 function interpolatePosition(start, end, magnitude) {
   var distance = getDistance(start, end);
   var vec = {
-    x: start.x - end.x,
-    y: start.y - end.y,
-    z: start.z - end.z
+    x: end.x - start.x,
+    y: end.y - start.y,
+    z: end.z - start.z
   }
   console.log('distance', distance);
   console.log('magnitude', magnitude);
   console.log('vec', vec);
   newPosition = {
-    x: start.x + ((distance / magnitude) / vec.x),
-    y: start.y + ((distance / magnitude ) / vec.y),
-    z: start.z + ((distance / magnitude ) / vec.z)
+    x: start.x + (((distance / magnitude) / vec.x) / distance),
+    y: start.y + (((distance / magnitude) / vec.y) / distance),
+    z: start.z + (((distance / magnitude) / vec.z) / distance)
   }
   return newPosition;
-}
-
-function updatePosition(obj) {
-  interpolatePosition(obj.object3D.position, )
 }
 
 AFRAME.registerComponent('markerevents', {
@@ -68,20 +65,22 @@ AFRAME.registerComponent('markerevents', {
     var oxygenPos = document.querySelector("#custom_marker-oxygen").object3D.position;
     var hydrogenPos = document.querySelector("#custom_marker-hydrogen").object3D.position;
 
-    // update and display position of marker under the model
-    if (oxygenMarker.object3D.visible) {
-      let oxygenText = "x = " + oxygenPos.x.toFixed(3).toString()
-        + "\ny = " + oxygenPos.y.toFixed(3).toString()
-        + "\nz = " + oxygenPos.z.toFixed(3).toString();
-      document.querySelector('#oxygen-label').setAttribute('text', { value: oxygenText });
-    }
+    if (debug) {
+      // update and display position of marker under the model
+      if (oxygenMarker.object3D.visible) {
+        let oxygenText = "x = " + oxygenPos.x.toFixed(3).toString()
+          + "\ny = " + oxygenPos.y.toFixed(3).toString()
+          + "\nz = " + oxygenPos.z.toFixed(3).toString();
+        document.querySelector('#oxygen-label').setAttribute('text', { value: oxygenText });
+      }
 
-    // update and display position of marker under the model
-    if (hydrogenMarker.object3D.visible) {
-      let hydrogenText = "x = " + hydrogenPos.x.toFixed(3).toString()
-        + "\ny = " + hydrogenPos.y.toFixed(3).toString()
-        + "\nz = " + hydrogenPos.z.toFixed(3).toString();
-      document.querySelector('#hydrogen-label').setAttribute('text', { value: hydrogenText });
+      // update and display position of marker under the model
+      if (hydrogenMarker.object3D.visible) {
+        let hydrogenText = "x = " + hydrogenPos.x.toFixed(3).toString()
+          + "\ny = " + hydrogenPos.y.toFixed(3).toString()
+          + "\nz = " + hydrogenPos.z.toFixed(3).toString();
+        document.querySelector('#hydrogen-label').setAttribute('text', { value: hydrogenText });
+      }
     }
 
     // if both markers are visible, get distance between markers
@@ -95,24 +94,27 @@ AFRAME.registerComponent('markerevents', {
         hydrogenMarker.object3D.position
       );
 
-      // if markers are in close proximity, change text color green
+      // if markers are in close proximity, update position
       if (distance < 2) {
-        // if (interpolateMag < 0.5)
-        //   interpolateMag += 0.025;
+        // if (interpolateMag < 1.0)
+        //   interpolateMag += 0.05;
 
-        document.querySelector('#hydrogen-label').setAttribute('text', {
-          color: '#00FF00'
-        });
-        document.querySelector('#oxygen-label').setAttribute('text', {
-          color: '#00FF00'
-        });
+        if (debug) {
+          // set debug text of coordinates to green
+          document.querySelector('#hydrogen-label').setAttribute('text', {
+            color: '#00FF00'
+          });
+          document.querySelector('#oxygen-label').setAttribute('text', {
+            color: '#00FF00'
+          });
 
-        document.querySelector('#distance-line').setAttribute('line', {
-          start: { x: oxPos.x , y: oxPos.y , z: oxPos.z },
-          end: { x: hyPos.x , y: hyPos.y , z: hyPos.z },
-          color: '#00FF00',
-          visible: true
-        })
+          document.querySelector('#distance-line').setAttribute('line', {
+            start: { x: oxPos.x , y: oxPos.y , z: oxPos.z },
+            end: { x: hyPos.x , y: hyPos.y , z: hyPos.z },
+            color: '#00FF00',
+            visible: true
+          });
+        }
 
         let endOxPos = {
           x: (hydrogenMarker.object3D.position.x - oxygenMarker.object3D.position.x) / 2,
@@ -128,48 +130,9 @@ AFRAME.registerComponent('markerevents', {
         console.log('endOxPos', endOxPos);
         console.log('endHyPos', endHyPos);
 
-        let newHyPos = interpolatePosition(
-          origin,
-          endHyPos,
-          interpolateMag
-        );
-
-        let newOxPos = interpolatePosition(
-          origin,
-          endOxPos,
-          interpolateMag
-        );
-
-        hydrogenObj.setAttribute('position', {
-          x: newHyPos.x,
-          y: newHyPos.y,
-          z: newHyPos.z
-        });
-        oxygenObj.setAttribute('position', {
-          x: newOxPos.x,
-          y: newOxPos.y,
-          z: newOxPos.z
-        });
-
-
-      } else {
-        // if (interpolateMag > 0.025)
-        //   interpolateMag -= 0.025;
-
-        document.querySelector('#hydrogen-label').setAttribute('text', {
-          color: '#FF0000'
-        });
-        document.querySelector('#oxygen-label').setAttribute('text', {
-          color: '#FF0000'
-        });
-
-        document.querySelector('#distance-line').setAttribute('line', {
-          start: { x: oxPos.x , y: oxPos.y , z: oxPos.z },
-          end: { x: hyPos.x , y: hyPos.y , z: hyPos.z },
-          color: '#FF0000',
-          visible: true
-        });
-
+        // POSITION INTERPLOATION
+        // INCOMPLETE, NEEDS FIXING
+        //
         // let newHyPos = interpolatePosition(
         //   origin,
         //   endHyPos,
@@ -181,6 +144,49 @@ AFRAME.registerComponent('markerevents', {
         //   endOxPos,
         //   interpolateMag
         // );
+        //
+        // hydrogenObj.setAttribute('position', {
+        //   x: newHyPos.x,
+        //   y: newHyPos.y,
+        //   z: newHyPos.z
+        // });
+        // oxygenObj.setAttribute('position', {
+        //   x: newOxPos.x,
+        //   y: newOxPos.y,
+        //   z: newOxPos.z
+        // });
+
+        hydrogenObj.setAttribute('position', {
+          x: endHyPos.x,
+          y: endHyPos.y,
+          z: endHyPos.z
+        });
+        oxygenObj.setAttribute('position', {
+          x: endOxPos.x,
+          y: endOxPos.y,
+          z: endOxPos.z
+        });
+
+
+      } else {
+        // if (interpolateMag > 0.05)
+        //   interpolateMag -= 0.05;
+
+        if (debug) {
+          document.querySelector('#hydrogen-label').setAttribute('text', {
+            color: '#FF0000'
+          });
+          document.querySelector('#oxygen-label').setAttribute('text', {
+            color: '#FF0000'
+          });
+
+          document.querySelector('#distance-line').setAttribute('line', {
+            start: { x: oxPos.x , y: oxPos.y , z: oxPos.z },
+            end: { x: hyPos.x , y: hyPos.y , z: hyPos.z },
+            color: '#FF0000',
+            visible: true
+          });
+        }
 
         hydrogenObj.setAttribute('position', {
           x: 0,
@@ -208,7 +214,7 @@ AFRAME.registerComponent('markerevents', {
       // );
 
 
-    } else {
+    } else if (debug) {
       document.querySelector('#distance-line').setAttribute('line', {
         visible: false
       })

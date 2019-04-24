@@ -5,6 +5,7 @@ const oxygenMarker = document.querySelector("#custom_marker-oxygen");
 const hydrogenMarker = document.querySelector("#custom_marker-hydrogen");
 const hydrogenObj = document.querySelector('#hydrogen-obj');
 const oxygenObj = document.querySelector('#oxygen-obj');
+const origin = {x: 0, y: 0, z: 0};
 var interpolateMag = 0.025;
 
 function getDistance(p1, p2) {
@@ -17,7 +18,7 @@ function getDistance(p1, p2) {
 }
 
 function interpolatePosition(start, end, magnitude) {
-  var distance = getDistance(start, end);
+  var distance = getDistance(start.object3D.position, end.object3D.position);
   var vec = {
     x: start.x - end.x,
     y: start.y - end.y,
@@ -34,10 +35,14 @@ function interpolatePosition(start, end, magnitude) {
   return newPosition;
 }
 
+function updatePosition(obj) {
+  interpolatePosition(obj.object3D.position, )
+}
+
 AFRAME.registerComponent('markerevents', {
   init: function () {
 
-    this.tick = AFRAME.utils.throttleTick(this.tick, 500, this);
+    this.tick = AFRAME.utils.throttleTick(this.tick, 50, this);
     var marker = this.el;
 
     // for console debugging detecting/losing targets and their positions
@@ -109,19 +114,31 @@ AFRAME.registerComponent('markerevents', {
           visible: true
         })
 
-        let newOxPos = {
+        let endOxPos = {
           x: (hydrogenMarker.object3D.position.x - oxygenMarker.object3D.position.x) / 2,
           y: (hydrogenMarker.object3D.position.y - oxygenMarker.object3D.position.y) / 2,
           z: (hydrogenMarker.object3D.position.z - oxygenMarker.object3D.position.z) / 2
         }
-        let newHyPos = {
+        let endHyPos = {
           x: (oxygenMarker.object3D.position.x - hydrogenMarker.object3D.position.x) / 2,
           y: (oxygenMarker.object3D.position.y - hydrogenMarker.object3D.position.y) / 2,
           z: (oxygenMarker.object3D.position.z - hydrogenMarker.object3D.position.z) / 2
         }
 
-        console.log('newOxPos', newOxPos);
-        console.log('newHyPos', newHyPos);
+        console.log('endOxPos', endOxPos);
+        console.log('endHyPos', endHyPos);
+
+        let newHyPos = interpolatePosition(
+          origin,
+          endHyPos,
+          interpolateMag
+        );
+
+        let newOxPos = interpolatePosition(
+          origin,
+          endOxPos,
+          interpolateMag
+        );
 
         hydrogenObj.setAttribute('position', {
           x: newHyPos.x,
@@ -151,7 +168,19 @@ AFRAME.registerComponent('markerevents', {
           end: { x: hyPos.x , y: hyPos.y , z: hyPos.z },
           color: '#FF0000',
           visible: true
-        })
+        });
+
+        // let newHyPos = interpolatePosition(
+        //   origin,
+        //   endHyPos,
+        //   interpolateMag
+        // );
+        //
+        // let newOxPos = interpolatePosition(
+        //   origin,
+        //   endOxPos,
+        //   interpolateMag
+        // );
 
         hydrogenObj.setAttribute('position', {
           x: 0,
@@ -166,23 +195,15 @@ AFRAME.registerComponent('markerevents', {
 
       }
 
-      // BROKEN CODE
-      // testing interpolating position of model objects to the midpoint between
-      // both markers. Currently uses position of markers rather than position
-      // of objects. Objects have position of [0, 0, 0] as they are relative to
-      // their parent component, the <a-marker>. The <a-component> element needs
-      // repositioning in relation to its origin, towards the midpoint of the ray
-      // cast between the two markers in the global space
-      //
       // let newOxPos = interpolatePosition(
-      //   oxygenMarker.object3D.position,
-      //   hydrogenMarker.object3D.position,
+      //   oxygenMarker,
+      //   hydrogenMarker,
       //   interpolateMag
       // );
 
       // let newHyPos = interpolatePosition(
-      //   hydrogenMarker.object3D.position,
-      //   oxygenMarker.object3D.position,
+      //   hydrogenMarker,
+      //   oxygenMarker,
       //   interpolateMag
       // );
 

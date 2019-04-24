@@ -214,10 +214,25 @@ AFRAME.registerComponent('markerevents', {
       // );
 
 
-    } else if (debug) {
-      document.querySelector('#distance-line').setAttribute('line', {
-        visible: false
-      })
+    } else {
+
+      hydrogenObj.setAttribute('position', {
+        x: 0,
+        y: 0,
+        z: 0
+      });
+      oxygenObj.setAttribute('position', {
+        x: 0,
+        y: 0,
+        z: 0
+      });
+
+      if (debug) {
+        document.querySelector('#distance-line').setAttribute('line', {
+          visible: false
+        })        
+      }
+
     }
 
   }

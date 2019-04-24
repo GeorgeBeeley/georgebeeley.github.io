@@ -18,7 +18,7 @@ function getDistance(p1, p2) {
 }
 
 function interpolatePosition(start, end, magnitude) {
-  var distance = getDistance(start.object3D.position, end.object3D.position);
+  var distance = getDistance(start, end);
   var vec = {
     x: start.x - end.x,
     y: start.y - end.y,

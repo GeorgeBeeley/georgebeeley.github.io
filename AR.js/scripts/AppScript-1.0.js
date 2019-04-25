@@ -1,10 +1,10 @@
 // const hiroMarker = d3.select("#marker-hiro");
 // const bangorMarker = d3.select("#custom_marker-bangor");
 
-const oxygenMarker = document.querySelector("#custom_marker-oxygen");
-const hydrogenMarker = document.querySelector("#custom_marker-hydrogen");
-const hydrogenObj = document.querySelector('#hydrogen-obj');
-const oxygenObj = document.querySelector('#oxygen-obj');
+const markerA = document.querySelector("#marker_a");
+const markerB = document.querySelector("#marker_b");
+const markerAObject = document.querySelector('#obj-a');
+const markerBObject = document.querySelector('#obj-b');
 const origin = {x: 0, y: 0, z: 0};
 var interpolateMag = 0.05;
 var debug = true;
@@ -46,8 +46,8 @@ AFRAME.registerComponent('markerevents', {
     function debugLog(m) {
       console.log('markerFound', m.id);
       console.log(m.getAttribute('position'));
-      console.log('hydrogen', hydrogenMarker.object3D.visible);
-      console.log('oxygen', oxygenMarker.object3D.visible);
+      console.log('oxygen', markerA.object3D.visible);
+      console.log('hydrogen', markerB.object3D.visible);
     }
 
     marker.addEventListener('markerFound', function() {
@@ -62,42 +62,42 @@ AFRAME.registerComponent('markerevents', {
   tick: function(t, dt) {
 
     // store positions of markers
-    var oxygenPos = document.querySelector("#custom_marker-oxygen").object3D.position;
-    var hydrogenPos = document.querySelector("#custom_marker-hydrogen").object3D.position;
+    var markerAPos = document.querySelector("#marker_a").object3D.position;
+    var markeBPos = document.querySelector("#marker_b").object3D.position;
 
     if (debug) {
       // update and display position of marker under the model
-      if (oxygenMarker.object3D.visible) {
-        let oxygenText = "x = " + oxygenPos.x.toFixed(3).toString()
-          + "\ny = " + oxygenPos.y.toFixed(3).toString()
-          + "\nz = " + oxygenPos.z.toFixed(3).toString()
-          + "\nrotation = " + oxygenMarker.getAttribute('rotation').x.toFixed(4)
-          + ", " + oxygenMarker.getAttribute('rotation').y.toFixed(4)
-          + ", " + oxygenMarker.getAttribute('rotation').z.toFixed(4);
-          document.querySelector('#oxygen-label').setAttribute('text', { value: oxygenText });
+      if (markerA.object3D.visible) {
+        let markerAText = "x = " + markerAPos.x.toFixed(3).toString()
+          + "\ny = " + markerAPos.y.toFixed(3).toString()
+          + "\nz = " + markerAPos.z.toFixed(3).toString()
+          + "\nrotation = " + markerA.getAttribute('rotation').x.toFixed(4)
+          + ", " + markerA.getAttribute('rotation').y.toFixed(4)
+          + ", " + markerA.getAttribute('rotation').z.toFixed(4);
+          document.querySelector('#marker-a-label').setAttribute('text', { value: markerAText });
       }
 
       // update and display position of marker under the model
-      if (hydrogenMarker.object3D.visible) {
-        let hydrogenText = "x = " + hydrogenPos.x.toFixed(3).toString()
-          + "\ny = " + hydrogenPos.y.toFixed(3).toString()
-          + "\nz = " + hydrogenPos.z.toFixed(3).toString()
-          + "\nrotation = " + hydrogenMarker.getAttribute('rotation').x.toFixed(4)
-          + ", " + hydrogenMarker.getAttribute('rotation').y.toFixed(4)
-          + ", " + hydrogenMarker.getAttribute('rotation').z.toFixed(4);
-        document.querySelector('#hydrogen-label').setAttribute('text', { value: hydrogenText });
+      if (markerB.object3D.visible) {
+        let markerBText = "x = " + markeBPos.x.toFixed(3).toString()
+          + "\ny = " + markeBPos.y.toFixed(3).toString()
+          + "\nz = " + markeBPos.z.toFixed(3).toString()
+          + "\nrotation = " + markerB.getAttribute('rotation').x.toFixed(4)
+          + ", " + markerB.getAttribute('rotation').y.toFixed(4)
+          + ", " + markerB.getAttribute('rotation').z.toFixed(4);
+        document.querySelector('#marker-b-label').setAttribute('text', { value: markerBText });
       }
     }
 
     // if both markers are visible, get distance between markers
-    if (oxygenMarker.object3D.visible && hydrogenMarker.object3D.visible) {
+    if (markerA.object3D.visible && markerB.object3D.visible) {
 
-      var oxPos = oxygenMarker.object3D.position;
-      var hyPos = hydrogenMarker.object3D.position;
+      var markerAPos = markerA.object3D.position;
+      var markerBPos = markerB.object3D.position;
 
       var distance = getDistance(
-        oxygenMarker.object3D.position,
-        hydrogenMarker.object3D.position
+        markerA.object3D.position,
+        markerB.object3D.position
       );
 
       // if markers are in close proximity, update position
@@ -107,16 +107,16 @@ AFRAME.registerComponent('markerevents', {
 
         if (debug) {
           // set debug text of coordinates to green
-          document.querySelector('#hydrogen-label').setAttribute('text', {
+          document.querySelector('#marker-b-label').setAttribute('text', {
             color: '#00FF00'
           });
-          document.querySelector('#oxygen-label').setAttribute('text', {
+          document.querySelector('#marker-a-label').setAttribute('text', {
             color: '#00FF00'
           });
 
           document.querySelector('#distance-line').setAttribute('line', {
-            start: { x: oxPos.x , y: oxPos.y , z: oxPos.z },
-            end: { x: hyPos.x , y: hyPos.y , z: hyPos.z },
+            start: { x: markerAPos.x , y: markerAPos.y , z: markerAPos.z },
+            end: { x: markerBPos.x , y: markerBPos.y , z: markerBPos.z },
             color: '#00FF00',
             visible: true
           });
@@ -124,55 +124,55 @@ AFRAME.registerComponent('markerevents', {
 
         // end positions for both are set to the midpoint between the markers
         // used as a value to offset the 3d objects on their origin
-        let endOxPos = {
-          x: (hydrogenMarker.object3D.position.x - oxygenMarker.object3D.position.x) / 2,
-          y: (hydrogenMarker.object3D.position.y - oxygenMarker.object3D.position.y) / 2,
-          z: (hydrogenMarker.object3D.position.z - oxygenMarker.object3D.position.z) / 2
+        let aEndPos = {
+          x: (markerB.object3D.position.x - markerA.object3D.position.x) / 2,
+          y: (markerB.object3D.position.y - markerA.object3D.position.y) / 2,
+          z: (markerB.object3D.position.z - markerA.object3D.position.z) / 2
         }
-        let endHyPos = {
-          x: (oxygenMarker.object3D.position.x - hydrogenMarker.object3D.position.x) / 2,
-          y: (oxygenMarker.object3D.position.y - hydrogenMarker.object3D.position.y) / 2,
-          z: (oxygenMarker.object3D.position.z - hydrogenMarker.object3D.position.z) / 2
+        let bEndPos = {
+          x: (markerA.object3D.position.x - markerB.object3D.position.x) / 2,
+          y: (markerA.object3D.position.y - markerB.object3D.position.y) / 2,
+          z: (markerA.object3D.position.z - markerB.object3D.position.z) / 2
         }
 
-        console.log('endOxPos', endOxPos);
-        console.log('endHyPos', endHyPos);
+        console.log('aEndPos', aEndPos);
+        console.log('bEndPos', bEndPos);
 
         // POSITION INTERPLOATION
         // INCOMPLETE, NEEDS FIXING
         //
         // let newHyPos = interpolatePosition(
         //   origin,
-        //   endHyPos,
+        //   bEndPos,
         //   interpolateMag
         // );
         //
         // let newOxPos = interpolatePosition(
         //   origin,
-        //   endOxPos,
+        //   aEndPos,
         //   interpolateMag
         // );
         //
-        // hydrogenObj.setAttribute('position', {
+        // markerBObject.setAttribute('position', {
         //   x: newHyPos.x,
         //   y: newHyPos.y,
         //   z: newHyPos.z
         // });
-        // oxygenObj.setAttribute('position', {
+        // markerAObject.setAttribute('position', {
         //   x: newOxPos.x,
         //   y: newOxPos.y,
         //   z: newOxPos.z
         // });
 
-        hydrogenObj.setAttribute('position', {
-          x: endHyPos.x,
-          y: endHyPos.y,
-          z: endHyPos.z
+        markerBObject.setAttribute('position', {
+          x: bEndPos.x,
+          y: bEndPos.y,
+          z: bEndPos.z
         });
-        oxygenObj.setAttribute('position', {
-          x: endOxPos.x,
-          y: endOxPos.y,
-          z: endOxPos.z
+        markerAObject.setAttribute('position', {
+          x: aEndPos.x,
+          y: aEndPos.y,
+          z: aEndPos.z
         });
 
 
@@ -181,27 +181,27 @@ AFRAME.registerComponent('markerevents', {
         //   interpolateMag -= 0.05;
 
         if (debug) {
-          document.querySelector('#hydrogen-label').setAttribute('text', {
+          document.querySelector('#marker-b-label').setAttribute('text', {
             color: '#FF0000'
           });
-          document.querySelector('#oxygen-label').setAttribute('text', {
+          document.querySelector('#marker-a-label').setAttribute('text', {
             color: '#FF0000'
           });
 
           document.querySelector('#distance-line').setAttribute('line', {
-            start: { x: oxPos.x , y: oxPos.y , z: oxPos.z },
-            end: { x: hyPos.x , y: hyPos.y , z: hyPos.z },
+            start: { x: markerAPos.x , y: markerAPos.y , z: markerAPos.z },
+            end: { x: markerBPos.x , y: markerBPos.y , z: markerBPos.z },
             color: '#FF0000',
             visible: true
           });
         }
 
-        hydrogenObj.setAttribute('position', {
+        markerBObject.setAttribute('position', {
           x: origin.x,
           y: origin.y,
           z: origin.z
         });
-        oxygenObj.setAttribute('position', {
+        markerAObject.setAttribute('position', {
           x: origin.x,
           y: origin.y,
           z: origin.z
@@ -210,26 +210,26 @@ AFRAME.registerComponent('markerevents', {
       }
 
       // let newOxPos = interpolatePosition(
-      //   oxygenMarker,
-      //   hydrogenMarker,
+      //   markerA.object3D.position,
+      //   markerB.object3D.position,
       //   interpolateMag
       // );
 
       // let newHyPos = interpolatePosition(
-      //   hydrogenMarker,
-      //   oxygenMarker,
+      //   markerB.object3D.position,
+      //   markerA.object3D.position,
       //   interpolateMag
       // );
 
 
     } else {
 
-      hydrogenObj.setAttribute('position', {
+      markerBObject.setAttribute('position', {
         x: origin.x,
         y: origin.y,
         z: origin.z
       });
-      oxygenObj.setAttribute('position', {
+      markerAObject.setAttribute('position', {
         x: origin.x,
         y: origin.y,
         z: origin.z

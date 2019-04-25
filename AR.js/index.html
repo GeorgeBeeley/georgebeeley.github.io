@@ -21,23 +21,23 @@
 
 		<a-assets>
 			<!-- GLTF models courtesey of Conor Forker: https://poly.google.com/user/5c3uyakiuXs -->
-			<a-asset-item id="hydrogen" src="resources/Hydrogen.gltf"></a-asset-item>
-			<a-asset-item id="oxygen" src="resources/Oxygen.gltf"></a-asset-item>
+			<a-asset-item id="model-a" src="resources/Oxygen.gltf"></a-asset-item>
+			<a-asset-item id="model-b" src="resources/Hydrogen.gltf"></a-asset-item>
 		</a-assets>
 
-		<a-marker id="custom_marker-oxygen" type="pattern" url="resources/oxygen-marker-cl.patt" attributes="emitevents: true;" markerevents>
-			<a-entity id="oxygen-obj" gltf-model="#oxygen" scale="15.0 15.0 15.0"></a-entity>
+		<a-marker id="marker_a" type="pattern" url="resources/marker_a.patt" attributes="emitevents: true;" markerevents>
+			<a-entity id="obj-a" gltf-model="#model-a" scale="15.0 15.0 15.0"></a-entity>
 			<!-- for position debugging -->
-			<a-entity id="oxygen-label" text="value: Hello World;" position="0.6 0.0 0.37" scale="1.5 1.5 1.5" rotation="-90.0 0.0 0.0"></a-entity>
+			<a-entity id="marker-a-label" text="" position="0.6 0.0 0.37" scale="1.5 1.5 1.5" rotation="-90.0 0.0 0.0"></a-entity>
 		</a-marker>
 
-		<a-marker id="custom_marker-hydrogen" type="pattern" url="resources/hydrogen-marker-cl.patt" attributes="emitevents: true;" markerevents>
-			<a-entity id="hydrogen-obj" gltf-model="#hydrogen" scale="15.0 15.0 15.0"></a-entity>
+		<a-marker id="marker_b" type="pattern" url="resources/marker_b.patt" attributes="emitevents: true;" markerevents>
+			<a-entity id="obj-b" gltf-model="#model-b" scale="15.0 15.0 15.0"></a-entity>
 			<!-- for position debugging -->
-			<a-entity id="hydrogen-label" text="value: Hello World;" position="0.6 0.0 0.37" scale="1.5 1.5 1.5" rotation="-90.0 0.0 0.0"></a-entity>
+			<a-entity id="marker-b-label" text="" position="0.6 0.0 0.37" scale="1.5 1.5 1.5" rotation="-90.0 0.0 0.0"></a-entity>
 		</a-marker>
 
-		<a-entity id="distance-line" line="" distanceline></a-entity>
+		<a-entity id="distance-line" line=""></a-entity>
 
 
 		<!-- BANGOR LOGO MARKER -->

@@ -70,15 +70,21 @@ AFRAME.registerComponent('markerevents', {
       if (oxygenMarker.object3D.visible) {
         let oxygenText = "x = " + oxygenPos.x.toFixed(3).toString()
           + "\ny = " + oxygenPos.y.toFixed(3).toString()
-          + "\nz = " + oxygenPos.z.toFixed(3).toString();
-        document.querySelector('#oxygen-label').setAttribute('text', { value: oxygenText });
+          + "\nz = " + oxygenPos.z.toFixed(3).toString()
+          + "\nrotation = " + oxygenMarker.getAttribute('rotation').x.toFixed(4)
+          + ", " + oxygenMarker.getAttribute('rotation').y.toFixed(4)
+          + ", " + oxygenMarker.getAttribute('rotation').z.toFixed(4);
+          document.querySelector('#oxygen-label').setAttribute('text', { value: oxygenText });
       }
 
       // update and display position of marker under the model
       if (hydrogenMarker.object3D.visible) {
         let hydrogenText = "x = " + hydrogenPos.x.toFixed(3).toString()
           + "\ny = " + hydrogenPos.y.toFixed(3).toString()
-          + "\nz = " + hydrogenPos.z.toFixed(3).toString();
+          + "\nz = " + hydrogenPos.z.toFixed(3).toString()
+          + "\nrotation = " + hydrogenMarker.getAttribute('rotation').x.toFixed(4)
+          + ", " + hydrogenMarker.getAttribute('rotation').y.toFixed(4)
+          + ", " + hydrogenMarker.getAttribute('rotation').z.toFixed(4);
         document.querySelector('#hydrogen-label').setAttribute('text', { value: hydrogenText });
       }
     }
@@ -116,6 +122,8 @@ AFRAME.registerComponent('markerevents', {
           });
         }
 
+        // end positions for both are set to the midpoint between the markers
+        // used as a value to offset the 3d objects on their origin
         let endOxPos = {
           x: (hydrogenMarker.object3D.position.x - oxygenMarker.object3D.position.x) / 2,
           y: (hydrogenMarker.object3D.position.y - oxygenMarker.object3D.position.y) / 2,
@@ -189,14 +197,14 @@ AFRAME.registerComponent('markerevents', {
         }
 
         hydrogenObj.setAttribute('position', {
-          x: 0,
-          y: 0,
-          z: 0
+          x: origin.x,
+          y: origin.y,
+          z: origin.z
         });
         oxygenObj.setAttribute('position', {
-          x: 0,
-          y: 0,
-          z: 0
+          x: origin.x,
+          y: origin.y,
+          z: origin.z
         });
 
       }
@@ -217,20 +225,20 @@ AFRAME.registerComponent('markerevents', {
     } else {
 
       hydrogenObj.setAttribute('position', {
-        x: 0,
-        y: 0,
-        z: 0
+        x: origin.x,
+        y: origin.y,
+        z: origin.z
       });
       oxygenObj.setAttribute('position', {
-        x: 0,
-        y: 0,
-        z: 0
+        x: origin.x,
+        y: origin.y,
+        z: origin.z
       });
 
       if (debug) {
         document.querySelector('#distance-line').setAttribute('line', {
           visible: false
-        })        
+        })
       }
 
     }

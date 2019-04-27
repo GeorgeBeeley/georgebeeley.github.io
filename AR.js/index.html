@@ -3,13 +3,16 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
 	<script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.1/aframe/build/aframe-ar.js"></script>
+	<!-- <script src="../three.js-master/src/three.js"></script> -->
 
+	<!-- <script src="https://d3js.org/d3.v3.min.js"></script> -->
 	<script src="https://rawgit.com/bryik/aframe-bmfont-text-component/master/dist/aframe-bmfont-text-component.min.js"></script>
 	<script src="https://unpkg.com/aframe-line-component/dist/aframe-line-component.min.js"></script>
-	<script src="https://d3js.org/d3.v3.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="resources/app.css">
+
 	<!-- LINK TO QR CODE LINKING TO AR WEBSITE -->
 	<!-- https://jeromeetienne.github.io/AR.js/three.js/examples/arcode.html#%7B%22urlQrCode%22%3A%22https%3A%2F%2Fgeorgebeeley.github.io%2FAR.js%22%2C%22hideUiEnabled%22%3Afalse%7D -->
+
 </head>
 
 <body style='margin : 0px; overflow: hidden;'>
@@ -23,16 +26,23 @@
 			<!-- GLTF models courtesey of Conor Forker: https://poly.google.com/user/5c3uyakiuXs -->
 			<a-asset-item id="model-a" src="resources/Oxygen.gltf"></a-asset-item>
 			<a-asset-item id="model-b" src="resources/Hydrogen.gltf"></a-asset-item>
+			<a-asset-item id="model-c" src="resources/H20.gltf"></a-asset-item>
 		</a-assets>
 
 		<a-marker id="marker_a" type="pattern" url="resources/marker_a.patt" attributes="emitevents: true;" markerevents>
-			<a-entity id="obj-a" gltf-model="#model-a" scale="15.0 15.0 15.0"></a-entity>
+			<a-entity id="obj-a" gltf-model="#model-a" scale="15.0 15.0 15.0">
+				<!-- attempted tweening using AFrame animation, unsuccessful -->
+				<!-- <a-animation id="animate-a" begin="animate" attribute="position" dur="300" from="0 0 0" to="0 0 0"></a-animation> -->
+			</a-entity>
 			<!-- for position debugging -->
 			<a-entity id="marker-a-label" text="" position="0.6 0.0 0.37" scale="1.5 1.5 1.5" rotation="-90.0 0.0 0.0"></a-entity>
 		</a-marker>
 
 		<a-marker id="marker_b" type="pattern" url="resources/marker_b.patt" attributes="emitevents: true;" markerevents>
-			<a-entity id="obj-b" gltf-model="#model-b" scale="15.0 15.0 15.0"></a-entity>
+			<a-entity id="obj-b" gltf-model="#model-b" scale="15.0 15.0 15.0">
+				<!-- attempted tweening using AFrame animation, unsuccessful -->
+				<!-- <a-animation id="animate-b" begin="animate" attribute="position" dur="300" from="0 0 0" to="0 0 0"></a-animation> -->
+			</a-entity>
 			<!-- for position debugging -->
 			<a-entity id="marker-b-label" text="" position="0.6 0.0 0.37" scale="1.5 1.5 1.5" rotation="-90.0 0.0 0.0"></a-entity>
 		</a-marker>

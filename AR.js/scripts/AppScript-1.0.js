@@ -3,9 +3,13 @@
 
 const markerA = document.querySelector("#marker_a");
 const markerB = document.querySelector("#marker_b");
-const markerAObject = document.querySelector('#obj-a');
-const markerBObject = document.querySelector('#obj-b');
-const origin = {x: 0, y: 0, z: 0};
+const objectA = document.querySelector('#obj-a');
+const objectB = document.querySelector('#obj-b');
+var markerAVector;
+var markerBVector;
+var objectAPos = new THREE.Vector3();
+var objectBPos = new THREE.Vector3();
+const origin = new THREE.Vector3(0, 0, 0);
 var interpolateMag = 0.05;
 var debug = true;
 
@@ -46,8 +50,6 @@ AFRAME.registerComponent('markerevents', {
     function debugLog(m) {
       console.log('markerFound', m.id);
       console.log(m.getAttribute('position'));
-      console.log('oxygen', markerA.object3D.visible);
-      console.log('hydrogen', markerB.object3D.visible);
     }
 
     marker.addEventListener('markerFound', function() {
@@ -62,29 +64,37 @@ AFRAME.registerComponent('markerevents', {
   tick: function(t, dt) {
 
     // store positions of markers
-    var markerAPos = document.querySelector("#marker_a").object3D.position;
-    var markeBPos = document.querySelector("#marker_b").object3D.position;
+    markerAVector = new THREE.Vector3(
+      markerA.object3D.position.x,
+      markerA.object3D.position.y,
+      markerA.object3D.position.z
+    );
+    markerBVector = new THREE.Vector3(
+      markerB.object3D.position.x,
+      markerB.object3D.position.y,
+      markerB.object3D.position.z
+    );
 
     if (debug) {
       // update and display position of marker under the model
       if (markerA.object3D.visible) {
-        let markerAText = "x = " + markerAPos.x.toFixed(3).toString()
-          + "\ny = " + markerAPos.y.toFixed(3).toString()
-          + "\nz = " + markerAPos.z.toFixed(3).toString()
-          + "\nrotation = " + markerA.getAttribute('rotation').x.toFixed(4)
-          + ", " + markerA.getAttribute('rotation').y.toFixed(4)
-          + ", " + markerA.getAttribute('rotation').z.toFixed(4);
+        let markerAText = "x = " + markerAVector.x.toFixed(3).toString()
+          + "\ny = " + markerAVector.y.toFixed(3).toString()
+          + "\nz = " + markerAVector.z.toFixed(3).toString()
+          + "\nrotation = " + markerA.getAttribute('rotation').x.toFixed(3)
+          + ", " + markerA.getAttribute('rotation').y.toFixed(3)
+          + ", " + markerA.getAttribute('rotation').z.toFixed(3);
           document.querySelector('#marker-a-label').setAttribute('text', { value: markerAText });
       }
 
       // update and display position of marker under the model
       if (markerB.object3D.visible) {
-        let markerBText = "x = " + markeBPos.x.toFixed(3).toString()
-          + "\ny = " + markeBPos.y.toFixed(3).toString()
-          + "\nz = " + markeBPos.z.toFixed(3).toString()
-          + "\nrotation = " + markerB.getAttribute('rotation').x.toFixed(4)
-          + ", " + markerB.getAttribute('rotation').y.toFixed(4)
-          + ", " + markerB.getAttribute('rotation').z.toFixed(4);
+        let markerBText = "x = " + markerBVector.x.toFixed(3).toString()
+          + "\ny = " + markerBVector.y.toFixed(3).toString()
+          + "\nz = " + markerBVector.z.toFixed(3).toString()
+          + "\nrotation = " + markerB.getAttribute('rotation').x.toFixed(3)
+          + ", " + markerB.getAttribute('rotation').y.toFixed(3)
+          + ", " + markerB.getAttribute('rotation').z.toFixed(3);
         document.querySelector('#marker-b-label').setAttribute('text', { value: markerBText });
       }
     }
@@ -92,8 +102,8 @@ AFRAME.registerComponent('markerevents', {
     // if both markers are visible, get distance between markers
     if (markerA.object3D.visible && markerB.object3D.visible) {
 
-      var markerAPos = markerA.object3D.position;
-      var markerBPos = markerB.object3D.position;
+      var markerAVector = markerA.object3D.position;
+      var markerBVector = markerB.object3D.position;
 
       var distance = getDistance(
         markerA.object3D.position,
@@ -102,8 +112,11 @@ AFRAME.registerComponent('markerevents', {
 
       // if markers are in close proximity, update position
       if (distance < 2) {
-        // if (interpolateMag < 1.0)
-        //   interpolateMag += 0.05;
+        if (interpolateMag < 1.0)
+          interpolateMag += 0.05;
+        else
+          interpolateMag = 1;
+
 
         if (debug) {
           // set debug text of coordinates to green
@@ -115,8 +128,8 @@ AFRAME.registerComponent('markerevents', {
           });
 
           document.querySelector('#distance-line').setAttribute('line', {
-            start: { x: markerAPos.x , y: markerAPos.y , z: markerAPos.z },
-            end: { x: markerBPos.x , y: markerBPos.y , z: markerBPos.z },
+            start: { x: markerAVector.x , y: markerAVector.y , z: markerAVector.z },
+            end: { x: markerBVector.x , y: markerBVector.y , z: markerBVector.z },
             color: '#00FF00',
             visible: true
           });
@@ -124,61 +137,41 @@ AFRAME.registerComponent('markerevents', {
 
         // end positions for both are set to the midpoint between the markers
         // used as a value to offset the 3d objects on their origin
-        let aEndPos = {
-          x: (markerB.object3D.position.x - markerA.object3D.position.x) / 2,
-          y: (markerB.object3D.position.y - markerA.object3D.position.y) / 2,
-          z: (markerB.object3D.position.z - markerA.object3D.position.z) / 2
-        }
-        let bEndPos = {
-          x: (markerA.object3D.position.x - markerB.object3D.position.x) / 2,
-          y: (markerA.object3D.position.y - markerB.object3D.position.y) / 2,
-          z: (markerA.object3D.position.z - markerB.object3D.position.z) / 2
-        }
+        let aEndPos = new THREE.Vector3(
+          (markerB.object3D.position.x - markerA.object3D.position.x) / 2,
+          (markerB.object3D.position.y - markerA.object3D.position.y) / 2,
+          (markerB.object3D.position.z - markerA.object3D.position.z) / 2
+        );
+        let bEndPos = new THREE.Vetor3(
+          (markerA.object3D.position.x - markerB.object3D.position.x) / 2,
+          (markerA.object3D.position.y - markerB.object3D.position.y) / 2,
+          (markerA.object3D.position.z - markerB.object3D.position.z) / 2
+        );
 
         console.log('aEndPos', aEndPos);
         console.log('bEndPos', bEndPos);
 
-        // POSITION INTERPLOATION
-        // INCOMPLETE, NEEDS FIXING
-        //
-        // let newHyPos = interpolatePosition(
-        //   origin,
-        //   bEndPos,
-        //   interpolateMag
-        // );
-        //
-        // let newOxPos = interpolatePosition(
-        //   origin,
-        //   aEndPos,
-        //   interpolateMag
-        // );
-        //
-        // markerBObject.setAttribute('position', {
-        //   x: newHyPos.x,
-        //   y: newHyPos.y,
-        //   z: newHyPos.z
-        // });
-        // markerAObject.setAttribute('position', {
-        //   x: newOxPos.x,
-        //   y: newOxPos.y,
-        //   z: newOxPos.z
-        // });
+        // linear interpolation between the objects origin and the mid point
+        // of the two
+        let newPosA = origin.lerp(aEndPos, interpolateMag);
+        let newPosB = origin.lerp(bEndPos, interpolateMag);
 
-        markerBObject.setAttribute('position', {
-          x: bEndPos.x,
-          y: bEndPos.y,
-          z: bEndPos.z
+        objectA.setAttribute('position', {
+          x: newPosA.x,
+          y: newPosA.y,
+          z: newPosA.z
         });
-        markerAObject.setAttribute('position', {
-          x: aEndPos.x,
-          y: aEndPos.y,
-          z: aEndPos.z
+        objectB.setAttribute('position', {
+          x: newPosB.x,
+          y: newPosB.y,
+          z: newPosB.z
         });
-
 
       } else {
-        // if (interpolateMag > 0.05)
-        //   interpolateMag -= 0.05;
+        if (interpolateMag > 0.00)
+          interpolateMag -= 0.05;
+          else
+            interpolateMag = 0;
 
         if (debug) {
           document.querySelector('#marker-b-label').setAttribute('text', {
@@ -189,22 +182,36 @@ AFRAME.registerComponent('markerevents', {
           });
 
           document.querySelector('#distance-line').setAttribute('line', {
-            start: { x: markerAPos.x , y: markerAPos.y , z: markerAPos.z },
-            end: { x: markerBPos.x , y: markerBPos.y , z: markerBPos.z },
+            start: { x: markerAVector.x , y: markerAVector.y , z: markerAVector.z },
+            end: { x: markerBVector.x , y: markerBVector.y , z: markerBVector.z },
             color: '#FF0000',
             visible: true
           });
         }
 
-        markerBObject.setAttribute('position', {
-          x: origin.x,
-          y: origin.y,
-          z: origin.z
+        let aEndPos = new THREE.Vector3(
+          (markerB.object3D.position.x - markerA.object3D.position.x) / 2,
+          (markerB.object3D.position.y - markerA.object3D.position.y) / 2,
+          (markerB.object3D.position.z - markerA.object3D.position.z) / 2
+        );
+        let bEndPos = new THREE.Vetor3(
+          (markerA.object3D.position.x - markerB.object3D.position.x) / 2,
+          (markerA.object3D.position.y - markerB.object3D.position.y) / 2,
+          (markerA.object3D.position.z - markerB.object3D.position.z) / 2
+        );
+
+        let newPosA = aEndPos.lerp(origin, interpolateMag);
+        let newPosB = bEndPos.lerp(origin, interpolateMag);
+
+        objectA.setAttribute('position', {
+          x: newPosA.x,
+          y: newPosA.y,
+          z: newPosA.z
         });
-        markerAObject.setAttribute('position', {
-          x: origin.x,
-          y: origin.y,
-          z: origin.z
+        objectB.setAttribute('position', {
+          x: newPosB.x,
+          y: newPosB.y,
+          z: newPosB.z
         });
 
       }
@@ -224,12 +231,12 @@ AFRAME.registerComponent('markerevents', {
 
     } else {
 
-      markerBObject.setAttribute('position', {
+      objectB.setAttribute('position', {
         x: origin.x,
         y: origin.y,
         z: origin.z
       });
-      markerAObject.setAttribute('position', {
+      objectA.setAttribute('position', {
         x: origin.x,
         y: origin.y,
         z: origin.z

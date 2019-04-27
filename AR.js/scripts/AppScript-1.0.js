@@ -142,7 +142,7 @@ AFRAME.registerComponent('markerevents', {
           (markerB.object3D.position.y - markerA.object3D.position.y) / 2,
           (markerB.object3D.position.z - markerA.object3D.position.z) / 2
         );
-        let bEndPos = new THREE.Vetor3(
+        let bEndPos = new THREE.Vector3(
           (markerA.object3D.position.x - markerB.object3D.position.x) / 2,
           (markerA.object3D.position.y - markerB.object3D.position.y) / 2,
           (markerA.object3D.position.z - markerB.object3D.position.z) / 2

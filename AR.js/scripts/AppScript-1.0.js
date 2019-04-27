@@ -200,8 +200,8 @@ AFRAME.registerComponent('markerevents', {
           (markerA.object3D.position.z - markerB.object3D.position.z) / 2
         );
 
-        let newPosA = aEndPos.lerp(origin, interpolateMag);
-        let newPosB = bEndPos.lerp(origin, interpolateMag);
+        let newPosA = origin.lerp(aEndPos, interpolateMag);
+        let newPosB = origin.lerp(bEndPos, interpolateMag);
 
         objectA.setAttribute('position', {
           x: newPosA.x,

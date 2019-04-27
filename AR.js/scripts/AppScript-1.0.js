@@ -22,22 +22,28 @@ function getDistance(p1, p2) {
   return distance;
 }
 
-function interpolatePosition(start, end, magnitude) {
-  var distance = getDistance(start, end);
-  var vec = {
-    x: end.x - start.x,
-    y: end.y - start.y,
-    z: end.z - start.z
-  }
-  console.log('distance', distance);
-  console.log('magnitude', magnitude);
-  console.log('vec', vec);
-  newPosition = {
-    x: start.x + (((distance / magnitude) / vec.x) / distance),
-    y: start.y + (((distance / magnitude) / vec.y) / distance),
-    z: start.z + (((distance / magnitude) / vec.z) / distance)
-  }
-  return newPosition;
+// a - markerA Vector3
+// b - makerB Vector3
+// m - magnitude of interpolation from origin (0 - 1)
+function getInterpolatedVector(a, b, m) {
+  // end positions for both are set to the midpoint between the markers
+  // used as a value to offset the 3d objects on their origin
+  let aEndPos = new THREE.Vector3(
+    (b.x - a.x) / 2,
+    (b.y - a.y) / 2,
+    (b.z - a.z) / 2
+  );
+  let bEndPos = new THREE.Vector3(
+    (a.x - b.x) / 2,
+    (a.y - b.y) / 2,
+    (a.z - b.z) / 2
+  );
+  // linear interpolation between the objects origin and the mid point
+  // of the two
+  let newPosA = origin.lerp(aEndPos, m);
+  let newPosB = origin.lerp(bEndPos, m);
+
+  return [ newPosA, newPosB ];
 }
 
 AFRAME.registerComponent('markerevents', {
@@ -105,10 +111,11 @@ AFRAME.registerComponent('markerevents', {
       var markerAVector = markerA.object3D.position;
       var markerBVector = markerB.object3D.position;
 
-      var distance = getDistance(
-        markerA.object3D.position,
-        markerB.object3D.position
-      );
+      var distance = markerAVector.distanceTo(markerBVector);
+      // var distance = getDistance(
+      //   markerA.object3D.position,
+      //   markerB.object3D.position
+      // );
 
       // if markers are in close proximity, update position
       if (distance < 2) {
@@ -135,36 +142,17 @@ AFRAME.registerComponent('markerevents', {
           });
         }
 
-        // end positions for both are set to the midpoint between the markers
-        // used as a value to offset the 3d objects on their origin
-        let aEndPos = new THREE.Vector3(
-          (markerB.object3D.position.x - markerA.object3D.position.x) / 2,
-          (markerB.object3D.position.y - markerA.object3D.position.y) / 2,
-          (markerB.object3D.position.z - markerA.object3D.position.z) / 2
-        );
-        let bEndPos = new THREE.Vector3(
-          (markerA.object3D.position.x - markerB.object3D.position.x) / 2,
-          (markerA.object3D.position.y - markerB.object3D.position.y) / 2,
-          (markerA.object3D.position.z - markerB.object3D.position.z) / 2
-        );
-
-        console.log('aEndPos', aEndPos);
-        console.log('bEndPos', bEndPos);
-
-        // linear interpolation between the objects origin and the mid point
-        // of the two
-        let newPosA = origin.lerp(aEndPos, interpolateMag);
-        let newPosB = origin.lerp(bEndPos, interpolateMag);
+        var newMarkerVecs = getInterpolatedVector(markerAVector, markerBVector, interpolateMag);
 
         objectA.setAttribute('position', {
-          x: newPosA.x,
-          y: newPosA.y,
-          z: newPosA.z
+          x: newMarkerVecs[0].x,
+          y: newMarkerVecs[0].y,
+          z: newMarkerVecs[0].z
         });
         objectB.setAttribute('position', {
-          x: newPosB.x,
-          y: newPosB.y,
-          z: newPosB.z
+          x: newMarkerVecs[1].x,
+          y: newMarkerVecs[1].y,
+          z: newMarkerVecs[1].z
         });
 
       } else {
@@ -189,29 +177,17 @@ AFRAME.registerComponent('markerevents', {
           });
         }
 
-        let aEndPos = new THREE.Vector3(
-          (markerB.object3D.position.x - markerA.object3D.position.x) / 2,
-          (markerB.object3D.position.y - markerA.object3D.position.y) / 2,
-          (markerB.object3D.position.z - markerA.object3D.position.z) / 2
-        );
-        let bEndPos = new THREE.Vector3(
-          (markerA.object3D.position.x - markerB.object3D.position.x) / 2,
-          (markerA.object3D.position.y - markerB.object3D.position.y) / 2,
-          (markerA.object3D.position.z - markerB.object3D.position.z) / 2
-        );
-
-        let newPosA = origin.lerp(aEndPos, interpolateMag);
-        let newPosB = origin.lerp(bEndPos, interpolateMag);
+        var newMarkerVecs = getInterpolatedVector(markerAVector, markerBVector, interpolateMag);
 
         objectA.setAttribute('position', {
-          x: newPosA.x,
-          y: newPosA.y,
-          z: newPosA.z
+          x: newMarkerVecs[0].x,
+          y: newMarkerVecs[0].y,
+          z: newMarkerVecs[0].z
         });
         objectB.setAttribute('position', {
-          x: newPosB.x,
-          y: newPosB.y,
-          z: newPosB.z
+          x: newMarkerVecs[1].x,
+          y: newMarkerVecs[1].y,
+          z: newMarkerVecs[1].z
         });
 
       }

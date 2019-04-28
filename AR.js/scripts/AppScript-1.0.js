@@ -2,6 +2,7 @@ const markerA = document.querySelector("#marker_a");
 const markerB = document.querySelector("#marker_b");
 const objectA = document.querySelector('#obj-a');
 const objectB = document.querySelector('#obj-b');
+const objectC = document.querySelector('#obj-c');
 const origin = new THREE.Vector3(0, 0, 0);
 var interpolateMag = 0;
 var interpolateInc = 0.05;
@@ -96,8 +97,12 @@ AFRAME.registerComponent('markerevents', {
 
         if (interpolateMag < 1.0)
           interpolateMag += interpolateInc;
-        else if (interpolateMag > 1.0)
+        else if (interpolateMag >= 1.0) {
           interpolateMag = 1;
+          objectA.setAttribute('visible', 'false');
+          objectB.setAttribute('visible', 'false');
+          objectC.setAttribute('visible', 'true');
+        }
 
         if (debug) {
           // set debug text of coordinates to green
@@ -116,36 +121,32 @@ AFRAME.registerComponent('markerevents', {
           });
         }
 
-        if (interpolateMag < 1) {
-          let objAPos = origin.lerp(aEndPos, interpolateMag);
-          objectA.setAttribute('position', {
-            x: objAPos.x,
-            y: objAPos.y,
-            z: objAPos.z
-          });
-          let objBPos = origin.lerp(bEndPos, interpolateMag);
-          objectB.setAttribute('position', {
-            x: objBPos.x,
-            y: objBPos.y,
-            z: objBPos.z
-          });
-        } else {
-          objectA.setAttribute('position', {
-            x: aEndPos.x,
-            y: aEndPos.y,
-            z: aEndPos.z
-          });
-          objectB.setAttribute('position', {
-            x: bEndPos.x,
-            y: bEndPos.y,
-            z: bEndPos.z
-          });
-        }
+        let objAPos = origin.lerp(aEndPos, interpolateMag);
+        objectA.setAttribute('position', {
+          x: objAPos.x,
+          y: objAPos.y,
+          z: objAPos.z
+        });
+        objectC.setAttribute('position', {
+          x: objAPos.x,
+          y: objAPos.y,
+          z: objAPos.z
+        });
+        let objBPos = origin.lerp(bEndPos, interpolateMag);
+        objectB.setAttribute('position', {
+          x: objBPos.x,
+          y: objBPos.y,
+          z: objBPos.z
+        });
 
       } else {
 
-        if (interpolateMag > 0.0)
+        if (interpolateMag > 0.0) {
           interpolateMag -= interpolateInc;
+          objectA.setAttribute('visible', 'true');
+          objectB.setAttribute('visible', 'true');
+          objectC.setAttribute('visible', 'false');
+        }
         else if (interpolateMag < 0.0)
           interpolateMag = 0;
 
@@ -165,45 +166,36 @@ AFRAME.registerComponent('markerevents', {
           });
         }
 
-        if (interpolateMag >= 0) {
-          let objAPos = origin.lerp(aEndPos, interpolateMag);
-          objectA.setAttribute('position', {
-            x: objAPos.x,
-            y: objAPos.y,
-            z: objAPos.z
-          });
-          let objBPos = origin.lerp(bEndPos, interpolateMag);
-          objectB.setAttribute('position', {
-            x: objBPos.x,
-            y: objBPos.y,
-            z: objBPos.z
-          });
-        } else {
-          objectA.setAttribute('position', {
-            x: 0,
-            y: 0,
-            z: 0
-          });
-          objectB.setAttribute('position', {
-            x: 0,
-            y: 0,
-            z: 0
-          });
-        }
-
+        let objAPos = origin.lerp(aEndPos, interpolateMag);
+        objectA.setAttribute('position', {
+          x: objAPos.x,
+          y: objAPos.y,
+          z: objAPos.z
+        });
+        objectC.setAttribute('position', {
+          x: objAPos.x,
+          y: objAPos.y,
+          z: objAPos.z
+        });
+        let objBPos = origin.lerp(bEndPos, interpolateMag);
+        objectB.setAttribute('position', {
+          x: objBPos.x,
+          y: objBPos.y,
+          z: objBPos.z
+        });
       }
 
     } else {
 
       objectA.setAttribute('position', {
-        x: 0,
-        y: 0,
-        z: 0
+        x: origin.x,
+        y: origin.y,
+        z: origin.z
       });
       objectB.setAttribute('position', {
-        x: 0,
-        y: 0,
-        z: 0
+        x: origin.x,
+        y: origin.y,
+        z: origin.z
       });
 
       if (debug) {

@@ -30,19 +30,14 @@
 		</a-assets>
 
 		<a-marker id="marker_a" type="pattern" url="resources/marker_a.patt" attributes="emitevents: true;" markerevents>
-			<a-entity id="obj-a" gltf-model="#model-a" scale="15.0 15.0 15.0">
-				<!-- attempted tweening using AFrame animation, unsuccessful -->
-				<!-- <a-animation id="animate-a" begin="animate" attribute="position" dur="300" from="0 0 0" to="0 0 0"></a-animation> -->
-			</a-entity>
+			<a-entity id="obj-a" gltf-model="#model-a" scale="15.0 15.0 15.0"></a-entity>
+			<a-entity id="obj-c" gltf-model="#model-c" scale="15.0 15.0 15.0" visible="false"></a-entity>
 			<!-- for position debugging -->
 			<a-entity id="marker-a-label" text="" position="0.6 0.0 0.37" scale="1.5 1.5 1.5" rotation="-90.0 0.0 0.0"></a-entity>
 		</a-marker>
 
 		<a-marker id="marker_b" type="pattern" url="resources/marker_b.patt" attributes="emitevents: true;" markerevents>
-			<a-entity id="obj-b" gltf-model="#model-b" scale="15.0 15.0 15.0">
-				<!-- attempted tweening using AFrame animation, unsuccessful -->
-				<!-- <a-animation id="animate-b" begin="animate" attribute="position" dur="300" from="0 0 0" to="0 0 0"></a-animation> -->
-			</a-entity>
+			<a-entity id="obj-b" gltf-model="#model-b" scale="15.0 15.0 15.0"></a-entity>
 			<!-- for position debugging -->
 			<a-entity id="marker-b-label" text="" position="0.6 0.0 0.37" scale="1.5 1.5 1.5" rotation="-90.0 0.0 0.0"></a-entity>
 		</a-marker>

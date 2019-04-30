@@ -82,6 +82,8 @@ function debugMarkerDiscovery(m) {
   console.log(m.getAttribute('position'));
 }
 
+onLoadComplete();
+
 // Register marker components with functionality for proximity based interaction
 // Functionality within the tick method
 AFRAME.registerComponent('markerevents', {

@@ -12,18 +12,27 @@ elements that are positioned by the markers in AR.
 
 */
 
-const el_markerA = document.querySelector("#marker_a");
-const el_markerB = document.querySelector("#marker_b");
-const el_objectA = document.querySelector('#obj-a');
-const el_objectB = document.querySelector('#obj-b');
-const el_objectC = document.querySelector('#obj-c');
-const v3_origin = new THREE.Vector3(0, 0, 0);
-var f_proximity = 2;
-var f_interpolateMag = 0.0;
-var f_interpolateInc = 0.05;
-var b_debug = false;
+const el_scene            = document.querySelector('a-scene');
+const el_markerA          = document.querySelector('#marker_a');
+const el_markerB          = document.querySelector('#marker_b');
+const el_elementA         = document.querySelector('#element-1');
+const el_elementB         = document.querySelector('#element-2');
+const el_compoundElement  = document.querySelector('#compound-element');
+const v3_origin           = new THREE.Vector3(0, 0, 0);
+var f_proximity           = 2;
+var f_interpolateMag      = 0.0;
+var f_interpolateInc      = 0.05;
+var b_debug               = false;
 var v3_markerAVector;
 var v3_markerBVector;
+
+// Triggered once the contents of the web page is done loading
+// Displays FPS and load stress metrics if debug mode is enabled
+function onLoadComplete() {
+  if (b_debug) {
+    el_scene.setAttribute('stats');
+  }
+}
 
 // Used in dubug mode to set visibility of debug text to true to display
 // position and rotation on top of marker
@@ -82,16 +91,16 @@ AFRAME.registerComponent('markerevents', {
     var el_marker = this.el;
 
     el_marker.addEventListener('markerFound', function() {
-      // debugMarkerDiscovery(marker);
+      // debugMarkerDiscovery(el_marker);
     });
     el_marker.addEventListener('markerLost', function() {
-      // debugMarkerDiscovery(marker);
+      // debugMarkerDiscovery(el_marker);
     });
 
   },
   tick: function(t, dt) {
 
-    // check if markerA is in view
+    // check if el_markerA is in view
     if (el_markerA.object3D.visible) {
       // store the position of the marker in a Vector3
       v3_markerAVector = new THREE.Vector3(
@@ -104,7 +113,7 @@ AFRAME.registerComponent('markerevents', {
       }
     }
 
-    // check if markerB is in view
+    // check if el_markerB is in view
     if (el_markerB.object3D.visible) {
       // store the position of the marker in a Vector3
       v3_markerBVector = new THREE.Vector3(
@@ -153,17 +162,17 @@ AFRAME.registerComponent('markerevents', {
         if (f_interpolateMag < 1.0) {
           f_interpolateMag += f_interpolateInc;
 
-          // Update the position of el_objectA to newly interpolated position
-          let v3_objAPos = v3_origin.lerp(v3_aEndPos, f_interpolateMag);
-          el_objectA.setAttribute('position', {
-            x: v3_objAPos.x,
-            y: v3_objAPos.y,
-            z: v3_objAPos.z
+          // Update the position of el_elementA to newly interpolated position
+          let v3_elementAPos = v3_origin.lerp(v3_aEndPos, f_interpolateMag);
+          el_elementA.setAttribute('position', {
+            x: v3_elementAPos.x,
+            y: v3_elementAPos.y,
+            z: v3_elementAPos.z
           });
 
-          // Update the position of el_objectB to newly interpolated position
+          // Update the position of el_elementB to newly interpolated position
           let v3_objBPos = v3_origin.lerp(v3_bEndPos, f_interpolateMag);
-          el_objectB.setAttribute('position', {
+          el_elementB.setAttribute('position', {
             x: v3_objBPos.x,
             y: v3_objBPos.y,
             z: v3_objBPos.z
@@ -177,20 +186,20 @@ AFRAME.registerComponent('markerevents', {
         else if (f_interpolateMag >= 1.0) {
           f_interpolateMag = 1;
 
-          // If el_objectC is not visible, set its visibility to true and set
-          // el_objectA and el_objectB 's visibility to false.
-          // console.log(el_objectC.getAttribute('visible'));
-          if (!el_objectC.getAttribute('visible')) {
-            el_objectA.setAttribute('visible', 'false');
-            el_objectB.setAttribute('visible', 'false');
-            el_objectC.setAttribute('visible', 'true');
+          // If el_compoundElement is not visible, set its visibility to true and set
+          // el_elementA and el_elementB 's visibility to false.
+          // console.log(el_compoundElement.getAttribute('visible'));
+          if (!el_compoundElement.getAttribute('visible')) {
+            el_elementA.setAttribute('visible', 'false');
+            el_elementB.setAttribute('visible', 'false');
+            el_compoundElement.setAttribute('visible', 'true');
           }
-          // Update the position of the visible el_objectC
-          let v3_objAPos = v3_origin.lerp(v3_aEndPos, f_interpolateMag);
-          el_objectC.setAttribute('position', {
-            x: v3_objAPos.x,
-            y: v3_objAPos.y,
-            z: v3_objAPos.z
+          // Update the position of the visible el_compoundElement
+          let v3_elementAPos = v3_origin.lerp(v3_aEndPos, f_interpolateMag);
+          el_compoundElement.setAttribute('position', {
+            x: v3_elementAPos.x,
+            y: v3_elementAPos.y,
+            z: v3_elementAPos.z
           });
 
         }
@@ -209,27 +218,27 @@ AFRAME.registerComponent('markerevents', {
         if (f_interpolateMag > 0.0) {
           f_interpolateMag -= f_interpolateInc;
 
-          // If el_objectC is visible, set its visibility to false and set
-          // el_objectA and el_objectB 's visibility to true.
-          if (el_objectC.getAttribute('visible')) {
-            el_objectA.setAttribute('visible', 'true');
-            el_objectB.setAttribute('visible', 'true');
-            el_objectC.setAttribute('visible', 'false');
+          // If el_compoundElement is visible, set its visibility to false and set
+          // el_elementA and el_elementB 's visibility to true.
+          if (el_compoundElement.getAttribute('visible')) {
+            el_elementA.setAttribute('visible', 'true');
+            el_elementB.setAttribute('visible', 'true');
+            el_compoundElement.setAttribute('visible', 'false');
           }
 
-          // set new interpolated position for el_objectA and el_objectB using
+          // set new interpolated position for el_elementA and el_elementB using
           // the updated f_interpolateMag
-          let v3_objAPos = v3_origin.lerp(v3_aEndPos, f_interpolateMag);
-          el_objectA.setAttribute('position', {
-            x: v3_objAPos.x,
-            y: v3_objAPos.y,
-            z: v3_objAPos.z
+          let v3_elementAPos = v3_origin.lerp(v3_aEndPos, f_interpolateMag);
+          el_elementA.setAttribute('position', {
+            x: v3_elementAPos.x,
+            y: v3_elementAPos.y,
+            z: v3_elementAPos.z
           });
-          let v3_objBPos = v3_origin.lerp(v3_bEndPos, f_interpolateMag);
-          el_objectB.setAttribute('position', {
-            x: v3_objBPos.x,
-            y: v3_objBPos.y,
-            z: v3_objBPos.z
+          let v3_elementBPos = v3_origin.lerp(v3_bEndPos, f_interpolateMag);
+          el_elementB.setAttribute('position', {
+            x: v3_elementBPos.x,
+            y: v3_elementBPos.y,
+            z: v3_elementBPos.z
           });
 
         }
@@ -250,12 +259,12 @@ AFRAME.registerComponent('markerevents', {
     // origin
     } else {
 
-      el_objectA.setAttribute('position', {
+      el_elementA.setAttribute('position', {
         x: v3_origin.x,
         y: v3_origin.y,
         z: v3_origin.z
       });
-      el_objectB.setAttribute('position', {
+      el_elementB.setAttribute('position', {
         x: v3_origin.x,
         y: v3_origin.y,
         z: v3_origin.z

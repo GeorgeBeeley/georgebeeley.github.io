@@ -1,19 +1,13 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="resources/app.css">
-	<link rel="stylesheet" type="text/css" href="resources/periodic-table.css">
-	<!-- <script src="https://d3js.org/d3.v3.min.js"></script> -->
-	<script src="https://aframe.io/releases/0.9.1/aframe.min.js"></script>
+	<script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
 	<script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.1/aframe/build/aframe-ar.js"></script>
+
+	<!-- <script src="https://d3js.org/d3.v3.min.js"></script> -->
 	<script src="https://rawgit.com/bryik/aframe-bmfont-text-component/master/dist/aframe-bmfont-text-component.min.js"></script>
 	<script src="https://unpkg.com/aframe-line-component/dist/aframe-line-component.min.js"></script>
-
-	<!-- Scripts required for periodic table interface -->
-	<!-- <script src="http://threejs.org/build/three.min.js"></script> -->
-	<script src="http://threejs.org/examples/js/libs/tween.min.js"></script>
-	<script src="http://threejs.org/examples/js/controls/TrackballControls.js"></script>
-	<script src="http://threejs.org/examples/js/renderers/CSS3DRenderer.js"></script>
+	<link rel="stylesheet" type="text/css" href="resources/app.css">
 
 	<!-- LINK TO QR CODE LINKING TO AR WEBSITE -->
 	<!-- https://jeromeetienne.github.io/AR.js/three.js/examples/arcode.html#%7B%22urlQrCode%22%3A%22https%3A%2F%2Fgeorgebeeley.github.io%2FAR.js%22%2C%22hideUiEnabled%22%3Afalse%7D -->
@@ -22,13 +16,7 @@
 
 <body style='margin : 0px; overflow: hidden;'>
 
-	<div id="menu">
-		<button id="toggle-table">TABLE</button>
-	</div>
-
 	<a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
-
-		<a-entity id="table-of-elements" visible="false"></a-entity>
 
 		<a-entity light="type: ambient; color: #BBB"></a-entity>
 		<a-entity light="type: directional; color: #FFF; intensity: 1.0" position="-0.5 1 1"></a-entity>
@@ -55,12 +43,12 @@
 
 		<a-entity id="distance-line" visible="true"></a-entity>
 
-		<a-entity camera="active: true;" look-controls id="camera" near="1" far="10000" fov="40"></a-entity>
+		<a-entity camera></a-entity>
 
 	</a-scene>
 
+	<!-- <script src="scripts/barChart.js"></script> -->
 	<script src="scripts/AppScript-1.0.js"></script>
-	<script src="scripts/three-periodic-table.js"></script>
 
 </body>
 

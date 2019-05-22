@@ -22,7 +22,7 @@ const v3_origin           = new THREE.Vector3(0, 0, 0);
 var f_proximity           = 2;
 var f_interpolateMag      = 0.0;
 var f_interpolateInc      = 0.05;
-var b_debug               = false;
+var b_debug               = true;
 var v3_markerAVector;
 var v3_markerBVector;
 

@@ -30,7 +30,7 @@ var v3_markerBVector;
 // Displays FPS and load stress metrics if debug mode is enabled
 function onLoadComplete() {
   if (b_debug) {
-    el_scene.setAttribute('stats');
+    el_scene.setAttribute('stats', '');
   }
 }
 

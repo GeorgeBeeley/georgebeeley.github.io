@@ -1,0 +1,125 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<script type="text/javascript" src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
+	<script type="text/javascript" src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.1/aframe/build/aframe-ar.js"></script>
+	<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+
+	<script src="https://rawgit.com/bryik/aframe-bmfont-text-component/master/dist/aframe-bmfont-text-component.min.js"></script>
+	<!-- <script src="https://unpkg.com/aframe-line-component/dist/aframe-line-component.min.js"></script> -->
+	<link rel="stylesheet" type="text/css" href="scripts/app.css">
+	<link rel="stylesheet" type="text/css" href="scripts/d3PeriodicTable.css">
+
+	<!-- LINK TO QR CODE LINKING TO AR WEBSITE -->
+	<!-- https://jeromeetienne.github.io/AR.js/three.js/examples/arcode.html#%7B%22urlQrCode%22%3A%22https%3A%2F%2Fgeorgebeeley.github.io%2FAR.js%22%2C%22hideUiEnabled%22%3Afalse%7D -->
+
+</head>
+
+<body style='margin: 0px; overflow: hidden;'>
+
+	<svg style="display: none;" width="960" height="700"></svg>
+
+	<script id="grid" type="text/plain">
+		H                                                  He
+		Li Be                               B  C  N  O  F  Ne
+		Na Mg                               Al Si P  S  CI Ar
+		K  Ca Sc Ti V  Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr
+		Rb Sr Y  Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I  Xe
+		Cs Ba :: Hf Ta W  Re Os lr Pt Au Hg Ti Pb Bi Po At Rn
+		Fr Ra :: Rf Db Sg Bh Hs Mt Ds Rg Cn Nh FI Mc Lv Ts Og
+
+		La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu
+		Ac Th Pa U  Np Pu Am Cm Bk Cf Es Fm Md No Lr
+	</script>
+
+	<div class="interface">
+		<div id="left">
+			<button id="left" class="round-btn">+</button><br>
+			<button id="left" class="round-btn">-</button><br>
+			<button class="periodic-btn">Set Element A</button>
+		</div>
+		<div id="right">
+			<button id="right" class="round-btn">+</button><br>
+			<button id="right" class="round-btn">-</button><br>
+			<button class="periodic-btn">Set Element B</button>
+		</div>
+	</div>
+
+	<a-scene embedded
+		arjs="sourceType: webcam;
+					debugUIEnabled: false;
+					detectionMode: mono_and_matrix;
+					matrixCodeType: 3x3;"
+		vr-mode-ui="enabled: false">
+
+		<!-- <a-entity light="type: ambient; color: #BBB"></a-entity> -->
+		<a-entity
+			light="type: directional; color: #FFF; intensity: 1.0"
+			position="-0.5 1 1">
+		</a-entity>
+
+		<a-assets>
+			<!-- GLTF models courtesey of Conor Forker:
+			https://poly.google.com/user/5c3uyakiuXs -->
+			<a-asset-item id="model-a" src="resources/Oxygen.gltf">
+			</a-asset-item>
+			<a-asset-item id="model-b" src="resources/Hydrogen.gltf">
+			</a-asset-item>
+			<a-asset-item id="model-c" src="resources/H20.gltf">
+			</a-asset-item>
+		</a-assets>
+
+		<a-marker id="marker_a"
+			type="pattern"
+			url="resources/marker_a.patt"
+			attributes="emitevents: true;"
+			markerevents>
+			<a-entity id="element-1"
+					gltf-model="#model-a"
+					scale="15.0 15.0 15.0">
+			</a-entity>
+			<a-entity id="compound-element"
+					gltf-model="#model-c"
+					scale="15.0 15.0 15.0"
+					visible="false">
+			</a-entity>
+			<!-- for position debugging -->
+			<a-entity id="marker-a-label"
+					text=""
+					position="0.6 0.0 0.37"
+					scale="1.5 1.5 1.5"
+					rotation="-90.0 0.0 0.0">
+			</a-entity>
+		</a-marker>
+
+		<a-marker id="marker_b"
+			type="pattern"
+			url="resources/marker_b.patt"
+			attributes="emitevents: true;"
+			markerevents>
+			<a-entity id="element-2"
+					gltf-model="#model-b"
+					scale="15.0 15.0 15.0">
+			</a-entity>
+			<!-- for position debugging -->
+			<a-entity id="marker-b-label"
+					text=""
+					position="0.6 0.0 0.37"
+					scale="1.5 1.5 1.5"
+					rotation="-90.0 0.0 0.0">
+			</a-entity>
+		</a-marker>
+
+		<a-entity id="distance-line" visible="true"></a-entity>
+
+		<a-entity camera></a-entity>
+
+	</a-scene>
+
+	<!-- <script src="scripts/barChart.js"></script> -->
+	<script src="scripts/AppScript-1.0.js"></script>
+	<script src="scripts/d3PeriodicTable.js"></script>
+
+</body>
+
+</html>

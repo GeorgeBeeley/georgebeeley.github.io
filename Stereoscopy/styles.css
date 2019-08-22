@@ -1,0 +1,118 @@
+@font-face {
+  font-family: "Gravity-Regular";
+  src: url('fonts/gravity/Gravity-Regular.otf') format("opentype");
+}
+
+@font-face {
+  font-family: "Gravity-Italic";
+  src: url('fonts/gravity/Gravity-Italic.otf') format("opentype");
+}
+
+@font-face {
+  font-family: "Gravity-Light";
+  src: url('fonts/gravity/Gravity-Light.otf') format("opentype");
+}
+
+@font-face {
+  font-family: "Gravity-LightItalic";
+  src: url('fonts/gravity/Gravity-LightItalic.otf') format("opentype");
+}
+
+@font-face {
+  font-family: "Gravity-Bold";
+  src: url('fonts/gravity/Gravity-Bold.otf') format("opentype");
+}
+
+@font-face {
+  font-family: "Gravity-BoldItalic";
+  src: url('fonts/gravity/Gravity-BoldItalic.otf') format("opentype");
+}
+
+body {
+  font-family: 'Gravity-Regular';
+  font-size: 15px;
+}
+
+h1 {
+  font-family: 'Gravity-Light';
+  font-size: 46px;
+}
+
+#sidebar {
+  float: left;
+  position: fixed;
+  height: 100%;
+  width: 27%;
+  background-color: #f47a9e;
+  opacity: 0;
+  visibility: hidden;
+  transition:opacity 1000ms;
+  /* overflow-y: scroll; */
+}
+
+#sidebar > P {
+  margin: 30px;
+}
+
+#quote {
+  padding: 0 20px;
+  font-family: 'Gravity-Italic';
+  margin: 30px 30px 10px 30px;
+}
+
+#author {
+  margin: 0px 30px 30px 30px;
+  text-align: right;
+}
+
+#title {
+  text-align: center;
+}
+
+#defaultCanvas0 {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.controls {
+  padding-top: 20px;
+  position: relative;
+  text-align: center;
+}
+
+.sliders {
+  margin: 20px auto 30px auto;
+  max-width: 60%
+}
+
+.slidercontainer > .label {
+  text-align: center;
+  position: fixed;
+}
+
+.label > span {
+  font-family: "Gravity-Light";
+  float: right;
+  color: #FFF;
+}
+
+button {
+  font-family: "Gravity-Bold";
+  background-color: #ddd;
+  border-radius: 50px;
+  width: 100px;
+  padding: 15px 10px;
+  margin: 0 25px;
+}
+
+button:focus {
+  outline:0;
+}
+
+#btn-prev {
+}
+
+#btn-next {
+}

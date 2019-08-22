@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What is Steroscopy?</title>
+  <style> body {padding: 0; margin: 0;} </style>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="slider.css">
+  <link rel="icon" href="site-image.PNG">
+  <script src="p5/p5.min.js"></script>
+  <script src="addons/p5.dom.min.js"></script>
+  <script src="addons/p5.sound.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="introduction.js"></script>
+</head>
+<body>
+
+  <div id="sidebar">
+
+    <h1 id="title">Stereoscopy</h1>
+    <p id="quote">
+    "The mind perceives an object of three dimensions by means of the
+    two dissimilar pictures projected by it on the two retinae."
+    </p>
+    <p id="author">- Charles Wheatstone, 1838</p>
+    <p>
+      This interactive animation illustrates how two cameras, or retinae,
+      work together to create a stereograph image.
+    </p>
+    <p>
+      Toggle the left and right cameras (A and B) to see how it affects
+      the 3D image of the cube. The top-down representation of it on the right
+      illustrates each cameras line-of-sight towards the cube, showing you how
+      much of each corner of the cube is visible to each camera at its current
+      position.
+    </p>
+
+    <div class="controls">
+
+      <button disabled="true" id="btn-left" onclick="">Left Eye<br><span style="display: block;">Open</span><span style="display: none;">Closed</span>
+      </button>
+      <button disabled="true" id="btn-right" onclick="">Right Eye<br><span style="display: block;">Open</span><span style="display: none;">Closed</span>
+      </button>
+
+      <div class="sliders">
+
+        <div class="slidecontainer">
+          <p class="label">Zoom / Z-Position<br><span id="z-slide-value">50</span></p>
+          <input disabled="true" type="range" min="0" max="100" value="50" class="slider" id="z-slider">
+        </div>
+
+        <div class="slidecontainer">
+          <p class="label">X-Position<br><span id="x-slide-value">50</span></p>
+          <input disabled="true" type="range" min="-50" max="50" value="0" class="slider" id="x-slider">
+        </div>
+
+        <!-- Not in use. removing breaks the canvas update for some reason -->
+        <div class="slidecontainer" style="display: none;">
+          <p class="label">Y-Position<br><span id="y-slide-value">50</span></p>
+          <input disabled="true" type="range" min="-50" max="50" value="0" class="slider" id="y-slider">
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

@@ -44,9 +44,13 @@ function displayDebugInfo(m) {
   + ", " + m.getAttribute('rotation').y.toFixed(3)
   + ", " + m.getAttribute('rotation').z.toFixed(3);
   if (m === el_markerA)
-    document.querySelector('#marker-a-label').setAttribute('text', { value: s_markerText });
+    document.querySelector('#marker-a-label').setAttribute('text',
+      { value: s_markerText }
+    );
   else if (m === el_markerB) {
-    document.querySelector('#marker-b-label').setAttribute('text', { value: s_markerText });
+    document.querySelector('#marker-b-label').setAttribute('text',
+      { value: s_markerText }
+  );
   }
 }
 
@@ -258,7 +262,7 @@ AFRAME.registerComponent('markerevents', {
       }
 
     // If both markers are not visible, reset positions of the models to their
-    // origin
+    // origin and toggle visibility of the compound element
     } else {
 
       el_elementA.setAttribute('position', {
@@ -271,6 +275,9 @@ AFRAME.registerComponent('markerevents', {
         y: v3_origin.y,
         z: v3_origin.z
       });
+      el_compoundElement.setAttribute('visibile', 'false');
+      el_elementA.setAttribute('visibile', 'true');
+      el_elementB.setAttribute('visibile', 'true');
 
       // If both markers are not visible, ensure that the debug distance ray line
       // is not visible
